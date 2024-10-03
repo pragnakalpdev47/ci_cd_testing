@@ -1,0 +1,5 @@
+# environment file
+/env_project
+
+# databse file
+user_data.db
