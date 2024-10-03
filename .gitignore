@@ -3,3 +3,6 @@
 
 # databse file
 user_data.db
+
+# ignore cache folder
+/__pycache__
