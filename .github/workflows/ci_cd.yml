@@ -26,12 +26,9 @@ jobs:
 
     - name: Run tests
       run: |
-        source venv/bin/activate
-        # You can add more tests here or run commands to check the app functionality
-        flask --version  # Test if Flask is installed and available
-        # Example test (if you have test cases)
-        # pytest
-
+        source env_project/bin/activate
+        pip list
+        flask run
   # deploy:
   #   runs-on: ubuntu-latest
   #   needs: build
