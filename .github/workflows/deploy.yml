@@ -3,31 +3,27 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - master  # Trigger on push to main branch
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up SSH Agent
-        uses: webfactory/ssh-agent@v0.7.0
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          ssh-private-key: ${{ secrets.DEPLOYER_SSH_PRIVATE_KEY }}
+          python-version: '3.x'
 
-      - name: Add Server to Known Hosts
+      - name: Install Dependencies
         run: |
-          ssh-keyscan -H 192.168.0.111 >> ~/.ssh/known_hosts
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
 
-      - name: Deploy to Server
+      - name: Restart uWSGI
         run: |
-          ssh dev47deployer@192.168.0.111 << 'EOF'
-            /home/pragnakalpl4/Dev_47/CI_CD_Works/ci_cd_testing_server/ci_cd_testing
-            git pull 
-            source env_project/bin/activate
-            pip install -r requirements.txt
-            uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:app
-          EOF
+          sudo systemctl restart uwsgi
