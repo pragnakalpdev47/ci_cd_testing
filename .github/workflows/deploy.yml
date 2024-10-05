@@ -29,5 +29,5 @@ jobs:
             git pull 
             source env_project/bin/activate
             pip install -r requirements.txt
-            sudo systemctl restart uwsgi  # Adjust based on your uWSGI setup
+            uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:app
           EOF
