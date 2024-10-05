@@ -26,4 +26,4 @@ jobs:
 
       - name: Restart uWSGI
         run: |
-          sudo systemctl restart uwsgi
+          sudo systemctl restart uwsgi 
