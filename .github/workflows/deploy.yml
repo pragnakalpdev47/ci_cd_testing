@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master  # Trigger on push to main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH Agent
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOYER_SSH_PRIVATE_KEY }}
+
+      - name: Add Server to Known Hosts
+        run: |
+          ssh-keyscan -H 192.168.0.111 >> ~/.ssh/known_hosts
+
+      - name: Deploy to Server
+        run: |
+          ssh dev47deployer@192.168.0.111 << 'EOF'
+            /home/pragnakalpl4/Dev_47/CI_CD_Works/ci_cd_testing_server/ci_cd_testing
+            git pull 
+            source env_project/bin/activate
+            pip install -r requirements.txt
+            sudo systemctl restart uwsgi  # Adjust based on your uWSGI setup
+          EOF
