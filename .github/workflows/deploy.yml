@@ -32,7 +32,7 @@ jobs:
       - name: Start Application
         run: |
           source venv/bin/activate
-          nohup python ci_cd_testing.py > app.log 2>&1 &
+          nohup python -c "from ci_cd_testing import app; app.run(host='0.0.0.0', port=5000)" > app.log 2>&1 &
           echo $! > app.pid
 
       - name: Health Check
