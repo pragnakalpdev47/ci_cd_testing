@@ -24,6 +24,6 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
 
-      - name: Restart uWSGI
+      - name: Run flask app
         run: |
-          sudo systemctl restart uwsgi 
+          flask run
