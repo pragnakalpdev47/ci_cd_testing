@@ -24,7 +24,7 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
           pip install flask
-
-      - name: Run flask app
-        run: |
           python ci_cd_testing.py
+      # - name: Run flask app
+      #   run: |
+      #     python ci_cd_testing.py
