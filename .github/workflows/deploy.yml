@@ -27,4 +27,4 @@ jobs:
 
       - name: Run flask app
         run: |
-          flask run
+          python ci_cd_testing.py
