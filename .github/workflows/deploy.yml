@@ -24,7 +24,48 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
           pip install flask
-          nohup python ci_cd_testing.py
+
+      - name: Stop Existing Process
+        run: |
+          pkill -f ci_cd_testing.py || true
+
+      - name: Start Application
+        run: |
+          source venv/bin/activate
+          nohup python ci_cd_testing.py > app.log 2>&1 &
+          echo $! > app.pid
+
+      - name: Health Check
+        run: |
+          sleep 10
+          curl http://localhost:5000 || (cat app.log && exit 1)
+# name: CI/CD Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - master
+
+# jobs:
+#   deploy:
+#     runs-on: self-hosted
+
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.x'
+
+#       - name: Install Dependencies
+#         run: |
+#           python -m venv venv
+#           source venv/bin/activate
+#           pip install -r requirements.txt
+#           pip install flask
+#           nohup python ci_cd_testing.py
       # - name: Run flask app
       #   run: |
       #     python ci_cd_testing.py
